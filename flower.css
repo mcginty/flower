@@ -50,7 +50,7 @@ table {
 }
 
 body {
-    background: #222;
+    background: #2d2d2d url("bgfade.png") center no-repeat;
 }
 header {
     position:absolute;
@@ -70,6 +70,28 @@ header #authors {
     top:0px;
     font-size: 15px;
 }
+#info {
+    position:absolute;
+    top:60px;
+    left:0px;
+    width:400px;
+    color: white;
+    font-family: "Helvetica Neue";
+    font-weight: 100;
+    font-size: 24px;
+    padding: 0px 20px;
+}
+#info h1 {
+    font-size: 50px;
+}
+#info #incoming {
+    color: #00A0B0;
+}
+
+#info #outgoing {
+    color: #CC333F;
+}
+
 path.link {
     fill: none;
     stroke: #666;

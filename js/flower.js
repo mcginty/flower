@@ -28,16 +28,20 @@ var force = undefined;
 $.getJSON('json/dummy.json', function(data) {
   links = data;
   console.log("Set links to JSON data.");
-
+var total_incoming = 0;
+var total_outgoing = 0;
 
 // Compute the distinct nodes from the links.
 links.forEach(function(link) {
   link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, incoming: [], outgoing: []});
   link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, incoming: [], outgoing: []});
-  if (link.target.name == "me")
+  if (link.target.name == "me") {
     link.source.outgoing.push(link.id);
-  else
+    total_incoming += 1;
+  } else {
     link.target.incoming.push(link.id);
+    total_outgoing += 1;
+  }
 });
 
 var w = window.innerWidth,
@@ -49,7 +53,7 @@ var w = window.innerWidth,
     .size([w, h])
     .linkDistance(function(d){return 300-(d.target.weight*5);})
     .linkStrength(0.001)
-    .charge(-4000)
+    .charge(0)
     .on("tick", tick)
     .theta(0.3)
     .friction(.9)
@@ -61,12 +65,17 @@ force.nodes()[1].y = h/2;
 force.nodes()[1].px = w/2;
 force.nodes()[1].py = h/2;
 
-/*function fadeInCharge() {
-  force.charge(force.charge()-10).start()
-  if (force.charge() > -50) setTimeout(fadeInCharge, 1);
+function fadeInCharge() {
+  force.charge(force.charge()-40).start()
+  if (force.charge() > -4000) setTimeout(fadeInCharge, 1);
 }
-fadeInCharge();*/
+fadeInCharge();
 
+      $('#info h1').text("Kellie Rios");
+      $('#info #incoming').text("Incoming mails: " + total_incoming);
+      $('#info #outgoing').text("Outgoing mails: " + total_outgoing);
+      $('#info #total').text("Total mails: " + (total_incoming+total_outgoing));
+      $('#info #ratio').text("Ratio: " + (Math.round(100*(total_incoming/total_outgoing))/100));
 
 
 var svg = d3.select("#container").append("svg:svg")
@@ -84,12 +93,28 @@ var circle = svg.append("svg:g").selectAll("circle")
   .enter().append("svg:circle")
     .attr("r", function(d) { return (d.name=="me"?50:30); })
     .attr("transform","translate("+w/2+","+h/2+")")
-    .attr("fill", function(d) { return (d.name=="me"?"#EB6841":"#6A4A3C"); })
+    .attr("fill", function(d) { return (d.name=="me"?"#1D1D1D":"#444"); })
     .on("mouseover",function(d,i) {
-      d3.select(this).transition().duration(300).attr("fill", "black");
+      if (d.name == "me") {
+        $('#info h1').text("Kellie Rios");
+        $('#info #incoming').text("Incoming mails: " + total_incoming);
+        $('#info #outgoing').text("Outgoing mails: " + total_outgoing);
+        $('#info #total').text("Total mails: " + (total_incoming+total_outgoing));
+        $('#info #ratio').text("Ratio: " + (Math.round(100*(total_incoming/total_outgoing))/100));
+      } else {
+        $('#info h1').text(d.name);
+        $('#info #incoming').text("Incoming mails: " + d.incoming.length);
+        $('#info #outgoing').text("Outgoing mails: " + d.outgoing.length);
+        $('#info #total').text("Total mails: " + (d.incoming.length+d.outgoing.length));
+        $('#info #ratio').text("Ratio: " + (Math.round(100*(d.incoming.length/d.outgoing.length))/100));
+      }
     })
     .on("mouseout",function(d,i) {
-      d3.select(this).transition().duration(300).attr("fill", "#6A4A3C");
+      $('#info h1').text("Kellie Rios");
+      $('#info #incoming').text("Incoming mails: " + total_incoming);
+      $('#info #outgoing').text("Outgoing mails: " + total_outgoing);
+      $('#info #total').text("Total mails: " + (total_incoming+total_outgoing));
+      $('#info #ratio').text("Ratio: " + (Math.round(100*(total_incoming/total_outgoing))/100));
     })
     .call(force.drag);
 
@@ -116,8 +141,8 @@ function tick() {
         dy = d.target.y - d.source.y,
         //dr = Math.sqrt(dx * dx + dy * dy);
         idx = d.source.outgoing.indexOf(d.id)+1 || d.target.incoming.indexOf(d.id)+1; 
-        dr = 1000;
-    return "M" + d.source.x + "," + d.source.y + "A" + dr/idx*5 + "," + dr/idx*5 + " 0 0,1 " + d.target.x + "," + d.target.y;
+        dr = w/1.5;
+    return "M" + d.source.x + "," + d.source.y + "A" + dr/(Math.log(idx)+0.01) + "," + dr/(Math.log(idx)+0.01) + " 0 0,1 " + d.target.x + "," + d.target.y;
   });
   circle.attr("transform", function(d) {
     return "translate(" + d.x + "," + d.y + ")";
