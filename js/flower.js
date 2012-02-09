@@ -1,5 +1,7 @@
 var links = [
   {source: "me", target: "RJ", type: "licensing"},
+  {source: "me", target: "RJ", type: "resolved"},
+  {source: "RJ", target: "me", type: "licensing"},
   {source: "me", target: "Kellie", type: "licensing"},
   {source: "me", target: "Caroline", type: "suit"},
   {source: "me", target: "Tim", type: "suit"},
@@ -17,8 +19,10 @@ var nodes = {};
 
 // Compute the distinct nodes from the links.
 links.forEach(function(link) {
-  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, edges: 0});
+  link.source.edges += 1;
+  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, edges: 0});
+  link.target.edges += 1;
 });
 
 var w = window.innerWidth,
@@ -79,13 +83,13 @@ text.append("svg:text")
     .attr("y", ".31em")
     .text(function(d) { return d.name; });
 
-// Use elliptical arc path segments to doubly-encode directionality.
+// Use elliptical arcs path segments to n-encode edges.
 function tick() {
   path.attr("d", function(d) {
     var dx = d.target.x - d.source.x,
         dy = d.target.y - d.source.y,
         dr = Math.sqrt(dx * dx + dy * dy);
-    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+    return "M" + d.source.x + "," + d.source.y + "A" + dr*3 + "," + dr*3 + " 0 0,1 " + d.target.x + "," + d.target.y;
   });
 
   circle.attr("transform", function(d) {
