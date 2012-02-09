@@ -32,9 +32,12 @@ $.getJSON('json/dummy.json', function(data) {
 
 // Compute the distinct nodes from the links.
 links.forEach(function(link) {
-  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, edges: []});
-  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, edges: []});
-  link.target.edges.push(link.id);
+  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, incoming: [], outgoing: []});
+  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, incoming: [], outgoing: []});
+  if (link.target.name == "me")
+    link.source.outgoing.push(link.id);
+  else
+    link.target.incoming.push(link.id);
 });
 
 var w = window.innerWidth,
@@ -112,7 +115,7 @@ function tick() {
     var dx = d.target.x - d.source.x,
         dy = d.target.y - d.source.y,
         //dr = Math.sqrt(dx * dx + dy * dy);
-        idx = d.target.edges.indexOf(d.id)+1; 
+        idx = d.source.outgoing.indexOf(d.id)+1 || d.target.incoming.indexOf(d.id)+1; 
         dr = 1000;
     return "M" + d.source.x + "," + d.source.y + "A" + dr/idx*5 + "," + dr/idx*5 + " 0 0,1 " + d.target.x + "," + d.target.y;
   });
