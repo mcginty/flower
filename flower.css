@@ -13,28 +13,30 @@ marker#licensing {
     fill: green;
 }
 
-path.link.licensing {
-    stroke: green;
+path.link.incoming {
+    stroke: #00A0B0;
 }
 
-path.link.resolved {
-    stroke-dasharray: 0,2 1;
+path.link.outgoing {
+    /*stroke-dasharray: 0,2 1;*/
+    stroke: #CC333F;
 }
 
 circle {
-    fill: #ccc;
+    /*fill: #ccc;*/
     stroke: #333;
     stroke-width: 3.5px;
 }
 
 text {
     fill: #ffffff;
-    font: 15px sans-serif;
+    font-family: "Helvetica Neue", sans-serif;
+    font-weight: 100;
     pointer-events: none;
 }
 
 text.shadow {
-    stroke: #000;
-    stroke-width: 3px;
-    stroke-opacity: .8;
+    /*stroke: #000;
+    stroke-width: 2px;
+    stroke-opacity: .5;*/
 }
