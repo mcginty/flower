@@ -93,7 +93,7 @@ var circle = svg.append("svg:g").selectAll("circle")
   .enter().append("svg:circle")
     .attr("r", function(d) { return (d.name=="me"?50:30); })
     .attr("transform","translate("+w/2+","+h/2+")")
-    .attr("fill", function(d) { return (d.name=="me"?"#1D1D1D":"#444"); })
+    .attr("fill", function(d) { return (d.name=="me"?"#1D1D1D":"#333"); })
     .on("mouseover",function(d,i) {
       if (d.name == "me") {
         $('#info h1').text("Kellie Rios");
