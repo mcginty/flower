@@ -50,7 +50,7 @@ table {
 }
 
 body {
-    background: #2d2d2d url("bgfade.png") center no-repeat;
+    background: #2d2d2d center no-repeat;
 }
 header {
     position:absolute;
@@ -64,12 +64,7 @@ header {
     font-weight: 100;
     box-shadow: 0 5px 15px #000;
 }
-header #authors {
-    position:absolute;
-    right:30px;
-    top:0px;
-    font-size: 15px;
-}
+
 #info {
     position:absolute;
     top:60px;
@@ -79,7 +74,7 @@ header #authors {
     font-family: "Helvetica Neue", sans-serif;
     font-weight: 100;
     font-size: 24px;
-    padding: 0px 20px;
+    padding: 0px 0px;
 }
 
 #info h1 {
