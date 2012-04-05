@@ -74,7 +74,7 @@ header #authors {
     position:absolute;
     top:60px;
     left:0px;
-    width:400px;
+    width:100%;
     color: white;
     font-family: "Helvetica Neue", sans-serif;
     font-weight: 100;
